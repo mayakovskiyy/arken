@@ -1,0 +1,19 @@
+{
+  "lexicon": 1,
+  "id": "fun.arken.description",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["author", "description", "handle"],
+        "properties": {
+          "author": {"type": "string"},
+          "description": {"type": "string"},
+          "handle": {"type": "string"}
+        }
+      }
+    }
+  }
+}

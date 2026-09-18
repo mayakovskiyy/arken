@@ -4,66 +4,75 @@ package arken
 
 import (
 	"github.com/jcalabro/atmos/cbor"
+	"github.com/jcalabro/gt"
 )
 
 const (
-	NSIDArkenDescription = "fun.arken.description"
+	NSIDArkenProfile = "fun.arken.profile"
 )
 
-// ArkenDescription is a "fun.arken.description" record.
-type ArkenDescription struct {
-	LexiconTypeID string `json:"$type,omitempty" cborgen:"$type,const=fun.arken.description"`
-	Author        string `json:"author"`
-	Description   string `json:"description"`
-	Handle        string `json:"handle"`
+// ArkenProfile is a "fun.arken.profile" record.
+type ArkenProfile struct {
+	LexiconTypeID string            `json:"$type,omitempty" cborgen:"$type,const=fun.arken.profile"`
+	Description   string            `json:"description"`
+	Handle        string            `json:"handle"`
+	Name          gt.Option[string] `json:"name,omitzero"`
 
 	// extra preserves unknown fields for same-format round-trips.
 	extra []extraField
 }
 
-// Precomputed CBOR key tokens for ArkenDescription.
+// Precomputed CBOR key tokens for ArkenProfile.
 var (
-	cborKey_ArkenDescription_dollar_type = cbor.AppendTextKey(nil, "$type")
-	cborKey_ArkenDescription_author      = cbor.AppendTextKey(nil, "author")
-	cborKey_ArkenDescription_handle      = cbor.AppendTextKey(nil, "handle")
-	cborKey_ArkenDescription_description = cbor.AppendTextKey(nil, "description")
+	cborKey_ArkenProfile_name        = cbor.AppendTextKey(nil, "name")
+	cborKey_ArkenProfile_dollar_type = cbor.AppendTextKey(nil, "$type")
+	cborKey_ArkenProfile_handle      = cbor.AppendTextKey(nil, "handle")
+	cborKey_ArkenProfile_description = cbor.AppendTextKey(nil, "description")
 )
 
-func (s *ArkenDescription) MarshalCBOR() ([]byte, error) {
+func (s *ArkenProfile) MarshalCBOR() ([]byte, error) {
 	return s.AppendCBOR(make([]byte, 0, 256))
 }
 
-func (s *ArkenDescription) AppendCBOR(buf []byte) ([]byte, error) {
-	buf = cbor.AppendMapHeader(buf, uint64(4+countExtra(s.extra, extraEncodingCBOR)))
+func (s *ArkenProfile) AppendCBOR(buf []byte) ([]byte, error) {
+	n := 3 + countExtra(s.extra, extraEncodingCBOR)
+	if s.Name.HasVal() {
+		n++
+	}
+	buf = cbor.AppendMapHeader(buf, uint64(n))
 	if len(s.extra) > 0 {
 		ei := 0
+		ei, buf = appendCBORExtrasBefore(s.extra, ei, "name", buf)
+		if s.Name.HasVal() {
+			buf = append(buf, cborKey_ArkenProfile_name...)
+			buf = cbor.AppendText(buf, s.Name.Val())
+		}
 		ei, buf = appendCBORExtrasBefore(s.extra, ei, "$type", buf)
-		buf = append(buf, cborKey_ArkenDescription_dollar_type...)
-		buf = cbor.AppendText(buf, "fun.arken.description")
-		ei, buf = appendCBORExtrasBefore(s.extra, ei, "author", buf)
-		buf = append(buf, cborKey_ArkenDescription_author...)
-		buf = cbor.AppendText(buf, s.Author)
+		buf = append(buf, cborKey_ArkenProfile_dollar_type...)
+		buf = cbor.AppendText(buf, "fun.arken.profile")
 		ei, buf = appendCBORExtrasBefore(s.extra, ei, "handle", buf)
-		buf = append(buf, cborKey_ArkenDescription_handle...)
+		buf = append(buf, cborKey_ArkenProfile_handle...)
 		buf = cbor.AppendText(buf, s.Handle)
 		ei, buf = appendCBORExtrasBefore(s.extra, ei, "description", buf)
-		buf = append(buf, cborKey_ArkenDescription_description...)
+		buf = append(buf, cborKey_ArkenProfile_description...)
 		buf = cbor.AppendText(buf, s.Description)
 		_, buf = appendCBORExtrasBefore(s.extra, ei, "", buf)
 	} else {
-		buf = append(buf, cborKey_ArkenDescription_dollar_type...)
-		buf = cbor.AppendText(buf, "fun.arken.description")
-		buf = append(buf, cborKey_ArkenDescription_author...)
-		buf = cbor.AppendText(buf, s.Author)
-		buf = append(buf, cborKey_ArkenDescription_handle...)
+		if s.Name.HasVal() {
+			buf = append(buf, cborKey_ArkenProfile_name...)
+			buf = cbor.AppendText(buf, s.Name.Val())
+		}
+		buf = append(buf, cborKey_ArkenProfile_dollar_type...)
+		buf = cbor.AppendText(buf, "fun.arken.profile")
+		buf = append(buf, cborKey_ArkenProfile_handle...)
 		buf = cbor.AppendText(buf, s.Handle)
-		buf = append(buf, cborKey_ArkenDescription_description...)
+		buf = append(buf, cborKey_ArkenProfile_description...)
 		buf = cbor.AppendText(buf, s.Description)
 	}
 	return buf, nil
 }
 
-func (s *ArkenDescription) UnmarshalCBOR(data []byte) error {
+func (s *ArkenProfile) UnmarshalCBOR(data []byte) error {
 	pos, err := s.UnmarshalCBORAt(data, 0)
 	if err != nil {
 		return err
@@ -71,7 +80,7 @@ func (s *ArkenDescription) UnmarshalCBOR(data []byte) error {
 	return cbor.CheckTrailingData(pos, len(data))
 }
 
-func (s *ArkenDescription) UnmarshalCBORAt(data []byte, pos int) (int, error) {
+func (s *ArkenProfile) UnmarshalCBORAt(data []byte, pos int) (int, error) {
 	s.extra = clearExtra(s.extra, extraEncodingCBOR)
 	count, pos, err := cbor.ReadMapHeader(data, pos)
 	if err != nil {
@@ -93,6 +102,26 @@ func (s *ArkenDescription) UnmarshalCBORAt(data []byte, pos int) (int, error) {
 		keyOrderValid = true
 		pos = newPos
 		switch keyEnd - keyStart {
+		case 4:
+			if string(data[keyStart:keyEnd]) == "name" {
+				if cbor.IsNull(data, pos) {
+					pos++
+				} else {
+					var v string
+					v, pos, err = cbor.ReadText(data, pos)
+					if err != nil {
+						return 0, err
+					}
+					s.Name = gt.Some(v)
+				}
+			} else {
+				valueStart := pos
+				pos, err = cbor.SkipValue(data, pos)
+				if err != nil {
+					return 0, err
+				}
+				s.extra = append(s.extra, extraField{Key: string(data[keyStart:keyEnd]), Value: append([]byte(nil), data[valueStart:pos]...), Encoding: extraEncodingCBOR})
+			}
 		case 5:
 			if string(data[keyStart:keyEnd]) == "$type" {
 				s.LexiconTypeID, pos, err = cbor.ReadText(data, pos)
@@ -108,12 +137,7 @@ func (s *ArkenDescription) UnmarshalCBORAt(data []byte, pos int) (int, error) {
 				s.extra = append(s.extra, extraField{Key: string(data[keyStart:keyEnd]), Value: append([]byte(nil), data[valueStart:pos]...), Encoding: extraEncodingCBOR})
 			}
 		case 6:
-			if string(data[keyStart:keyEnd]) == "author" {
-				s.Author, pos, err = cbor.ReadText(data, pos)
-				if err != nil {
-					return 0, err
-				}
-			} else if string(data[keyStart:keyEnd]) == "handle" {
+			if string(data[keyStart:keyEnd]) == "handle" {
 				s.Handle, pos, err = cbor.ReadText(data, pos)
 				if err != nil {
 					return 0, err
@@ -152,45 +176,47 @@ func (s *ArkenDescription) UnmarshalCBORAt(data []byte, pos int) (int, error) {
 	return pos, nil
 }
 
-// Precomputed JSON key tokens for ArkenDescription.
+// Precomputed JSON key tokens for ArkenProfile.
 var (
-	jsonKey_ArkenDescription_dollar_type = []byte("\"$type\":")
-	jsonKey_ArkenDescription_author      = []byte("\"author\":")
-	jsonKey_ArkenDescription_description = []byte("\"description\":")
-	jsonKey_ArkenDescription_handle      = []byte("\"handle\":")
+	jsonKey_ArkenProfile_dollar_type = []byte("\"$type\":")
+	jsonKey_ArkenProfile_description = []byte("\"description\":")
+	jsonKey_ArkenProfile_handle      = []byte("\"handle\":")
+	jsonKey_ArkenProfile_name        = []byte("\"name\":")
 )
 
-func (s *ArkenDescription) MarshalJSON() ([]byte, error) {
+func (s *ArkenProfile) MarshalJSON() ([]byte, error) {
 	return s.AppendJSON(make([]byte, 0, 256))
 }
 
-func (s *ArkenDescription) AppendJSON(buf []byte) ([]byte, error) {
+func (s *ArkenProfile) AppendJSON(buf []byte) ([]byte, error) {
 	buf = append(buf, '{')
 	first := true
 	if !first {
 		buf = append(buf, ',')
 	}
-	buf = append(buf, jsonKey_ArkenDescription_dollar_type...)
-	buf = cbor.AppendJSONString(buf, "fun.arken.description")
+	buf = append(buf, jsonKey_ArkenProfile_dollar_type...)
+	buf = cbor.AppendJSONString(buf, "fun.arken.profile")
 	first = false
 	if !first {
 		buf = append(buf, ',')
 	}
-	buf = append(buf, jsonKey_ArkenDescription_author...)
-	buf = cbor.AppendJSONString(buf, s.Author)
-	first = false
-	if !first {
-		buf = append(buf, ',')
-	}
-	buf = append(buf, jsonKey_ArkenDescription_description...)
+	buf = append(buf, jsonKey_ArkenProfile_description...)
 	buf = cbor.AppendJSONString(buf, s.Description)
 	first = false
 	if !first {
 		buf = append(buf, ',')
 	}
-	buf = append(buf, jsonKey_ArkenDescription_handle...)
+	buf = append(buf, jsonKey_ArkenProfile_handle...)
 	buf = cbor.AppendJSONString(buf, s.Handle)
 	first = false
+	if s.Name.HasVal() {
+		if !first {
+			buf = append(buf, ',')
+		}
+		buf = append(buf, jsonKey_ArkenProfile_name...)
+		buf = cbor.AppendJSONString(buf, s.Name.Val())
+		first = false
+	}
 	for _, ef := range s.extra {
 		if ef.Encoding != extraEncodingJSON {
 			continue
@@ -207,12 +233,12 @@ func (s *ArkenDescription) AppendJSON(buf []byte) ([]byte, error) {
 	return buf, nil
 }
 
-func (s *ArkenDescription) UnmarshalJSON(data []byte) error {
+func (s *ArkenProfile) UnmarshalJSON(data []byte) error {
 	_, err := s.UnmarshalJSONAt(data, 0)
 	return err
 }
 
-func (s *ArkenDescription) UnmarshalJSONAt(data []byte, pos int) (int, error) {
+func (s *ArkenProfile) UnmarshalJSONAt(data []byte, pos int) (int, error) {
 	s.extra = clearExtra(s.extra, extraEncodingJSON)
 	var err error
 	pos, err = cbor.ReadJSONObjectStart(data, pos)
@@ -236,11 +262,6 @@ func (s *ArkenDescription) UnmarshalJSONAt(data []byte, pos int) (int, error) {
 			if err != nil {
 				return 0, err
 			}
-		case "author":
-			s.Author, pos, err = cbor.ReadJSONString(data, pos)
-			if err != nil {
-				return 0, err
-			}
 		case "description":
 			s.Description, pos, err = cbor.ReadJSONString(data, pos)
 			if err != nil {
@@ -250,6 +271,20 @@ func (s *ArkenDescription) UnmarshalJSONAt(data []byte, pos int) (int, error) {
 			s.Handle, pos, err = cbor.ReadJSONString(data, pos)
 			if err != nil {
 				return 0, err
+			}
+		case "name":
+			if cbor.IsJSONNull(data, pos) {
+				pos, err = cbor.SkipJSONNull(data, pos)
+				if err != nil {
+					return 0, err
+				}
+			} else {
+				var v string
+				v, pos, err = cbor.ReadJSONString(data, pos)
+				if err != nil {
+					return 0, err
+				}
+				s.Name = gt.Some(v)
 			}
 		default:
 			valueStart := pos

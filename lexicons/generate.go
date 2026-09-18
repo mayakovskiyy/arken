@@ -1,4 +1,4 @@
-package main
+package ggo
 
 import (
 	"log"
@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-	// Парсим все JSON-лексиконы в текущей папке
 	schemas, err := lexicon.ParseDir(".")
 	if err != nil {
 		log.Fatalf("failed  to parse lexicon dir: %v", err)
@@ -22,7 +21,6 @@ func main() {
 		log.Fatalf("failed to resolve catalog: %v", err)
 	}
 
-	// Конфигурация генератора
 	cfg := &lexgen.Config{
 		SharedTypesDir:    "api/lextypes",
 		SharedTypesPkg:    "lextypes",
@@ -37,7 +35,6 @@ func main() {
 		},
 	}
 
-	// Генерация и запись файлов
 	files, err := lexgen.Generate(cfg, cat)
 	if err != nil {
 		log.Fatalf("failed to generate code: %v", err)

@@ -9,8 +9,8 @@ import "fmt"
 // collection is not recognized or decoding fails.
 func DecodeRecord(collection string, data []byte) (any, error) {
 	switch collection {
-	case "fun.arken.description":
-		var v ArkenDescription
+	case "fun.arken.profile":
+		var v ArkenProfile
 		if err := v.UnmarshalCBOR(data); err != nil {
 			return nil, err
 		}

@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "fun.arken.description",
+  "id": "fun.arken.profile",
   "defs": {
     "main": {
       "type": "record",
@@ -9,7 +9,7 @@
         "type": "object",
         "required": ["author", "description", "handle"],
         "properties": {
-          "author": {"type": "string"},
+          "name": {"type": "string"},
           "description": {"type": "string"},
           "handle": {"type": "string"}
         }

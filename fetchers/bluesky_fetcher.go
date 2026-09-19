@@ -5,14 +5,12 @@ import (
 	"fmt"
 
 	atproto "github.com/bluesky-social/indigo/api/atproto"
-	// appbsky "github.com/bluesky-social/indigo/api/bsky"
+	_ "github.com/bluesky-social/indigo/api/bsky"
 	"github.com/bluesky-social/indigo/lex/util"
 )
 
-func FetchBluesky(c util.LexClient, did string) string {
+func FetchBluesky(handle string, c util.LexClient, did string) string {
 	ctx := context.Background()
-
-	util.RegisterType("app.bsky.actor.profile", &util.RawExtension{})
 
 	ans, err := atproto.RepoGetRecord(ctx, c, "", "app.bsky.actor.profile", did, "self")
 	if err != nil {
@@ -23,7 +21,7 @@ func FetchBluesky(c util.LexClient, did string) string {
 		fmt.Println("arken: empty bluesky record")
 		return ""
 	}
-	accountUrl := ans.Uri
+	accountUrl := fmt.Sprintf("https://bsky.app/profile/%s\n", handle)
 
 	return accountUrl
 }

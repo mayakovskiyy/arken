@@ -42,7 +42,7 @@ func main() {
 	if tangledProfile != "" {
 		fmt.Printf("Tangled profile: %s", tangledProfile)
 	}
-	blueskyProfile := fetchers.FetchBluesky(client, did)
+	blueskyProfile := fetchers.FetchBluesky(handle, client, did)
 	if blueskyProfile != "" {
 		fmt.Printf("Bluesky profile: %s", blueskyProfile)
 	}

@@ -7,6 +7,7 @@ import (
 	// "net/http"
 	// "time"
 
+	fetchers "arken/fetchers"
 	// arken "arken/lexicons/api/arken"
 	// "io"
 
@@ -14,7 +15,7 @@ import (
 	"github.com/bluesky-social/indigo/atproto/atclient"
 	"github.com/bluesky-social/indigo/atproto/identity"
 	"github.com/bluesky-social/indigo/atproto/syntax"
-	// lexutil "github.com/bluesky-social/indigo/lex/util"
+	// "github.com/bluesky-social/indigo/lex/util"
 )
 
 func main() {
@@ -36,4 +37,13 @@ func main() {
 
 	did := fmt.Sprintf("%s", client.AccountDID)
 	fmt.Printf("ok! %s\n", did)
+
+	tangledProfile := fetchers.FetchTangled(handle, client, did)
+	if tangledProfile != "" {
+		fmt.Printf("Tangled profile: %s", tangledProfile)
+	}
+	blueskyProfile := fetchers.FetchBluesky(client, did)
+	if blueskyProfile != "" {
+		fmt.Printf("Bluesky profile: %s", blueskyProfile)
+	}
 }

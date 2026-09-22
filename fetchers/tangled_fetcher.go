@@ -24,18 +24,13 @@ func FetchTangled(handle string, c util.LexClient, did string) string {
 			fmt.Printf("404 arken: not found\n%s", err)
 		}
 	}
-	if ans == nil {
-		fmt.Println("arken: empty tangled record")
-		return ""
-	}
+	/* if ans == nil {
+	fmt.Println("arken: empty tangled record")
+	return ""
+	} */
 
 	if ans != nil {
 		accountUrl = fmt.Sprintf("https://tangled.sh/%s\n", handle)
 	}
-	/* pData, ok := ans.Value.Val.(*appbsky.ActorProfile)
-	if !ok {
-		fmt.Println("arken: record is not a profile")
-		} */
-
 	return accountUrl
 }

@@ -46,4 +46,8 @@ func main() {
 	if blueskyProfile != "" {
 		fmt.Printf("Bluesky profile: %s", blueskyProfile)
 	}
+	whitewindProfile := fetchers.FetchWhiteWind(handle, client, did)
+	if blueskyProfile != "" {
+		fmt.Printf("Bluesky profile: %s", whitewindProfile)
+	}
 }

@@ -47,7 +47,11 @@ func main() {
 		fmt.Printf("Bluesky profile: %s", blueskyProfile)
 	}
 	whitewindProfile := fetchers.FetchWhiteWind(handle, client, did)
-	if blueskyProfile != "" {
-		fmt.Printf("Bluesky profile: %s", whitewindProfile)
+	if whitewindProfile != "" {
+		fmt.Printf("WhiteWind profile: %s", whitewindProfile)
+	}
+	streamplaceProfile := fetchers.FetchStreamplace(handle, client, did)
+	if streamplaceProfile != "" {
+		fmt.Printf("Streamplace profile: %s", streamplaceProfile)
 	}
 }

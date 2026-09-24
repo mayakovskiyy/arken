@@ -30,7 +30,7 @@ func FetchStreamplace(handle string, c util.LexClient, did string) string {
 	} */
 
 	if ans != nil {
-		accountUrl = fmt.Sprintf("https://tangled.sh/%s\n", handle)
+		accountUrl = fmt.Sprintf("@%s\n", handle)
 	}
 	return accountUrl
 }

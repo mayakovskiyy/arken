@@ -21,12 +21,12 @@ func FetchWhiteWind(handle string, c util.LexClient, did string) string {
 	if err != nil {
 		fmt.Println(err)
 
-		if strings.Contains(err.Error(), "not found") {
+		if strings.Contains(err.Error(), "RecordNotFound") {
 			fmt.Printf("404 arken: not found\n%s", err)
 		}
 	}
 	if ans == nil {
-		fmt.Println("arken: empty whitewind record")
+		fmt.Println("arken: empty whitewind record\n")
 		return ""
 	}
 

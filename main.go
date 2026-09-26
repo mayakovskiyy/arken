@@ -9,12 +9,15 @@ import (
 
 	fetchers "arken/fetchers"
 	// arken "arken/lexicons/api/arken"
+	pfuncs "arken/profile_funcs"
+
 	// "io"
 
 	// "github.com/bluesky-social/indigo/api/atproto"
 	"github.com/bluesky-social/indigo/atproto/atclient"
 	"github.com/bluesky-social/indigo/atproto/identity"
 	"github.com/bluesky-social/indigo/atproto/syntax"
+	// lexutil "github.com/bluesky-social/indigo/lex/util"
 	// "github.com/bluesky-social/indigo/lex/util"
 )
 
@@ -23,6 +26,7 @@ func main() {
 
 	var handle string
 	var password string
+	var description string
 
 	fmt.Scan(&handle)
 	fmt.Scan(&password)
@@ -37,6 +41,13 @@ func main() {
 
 	did := fmt.Sprintf("%s", client.AccountDID)
 	fmt.Printf("ok! %s\n", did)
+
+	profile := pfuncs.FetchProfile(client, did)
+
+	if profile != true {
+		fmt.Scan(&description)
+		pfuncs.WriteDescription(ctx, description, handle, did, client)
+	}
 
 	tangledProfile := fetchers.FetchTangled(handle, client, did)
 	if tangledProfile != "" {

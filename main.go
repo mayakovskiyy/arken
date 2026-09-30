@@ -49,6 +49,9 @@ func main() {
 		pfuncs.WriteDescription(ctx, description, handle, did, client)
 	}
 
+	profileData := pfuncs.GetDescription(did, client, ctx)
+	fmt.Println(profileData)
+
 	tangledProfile := fetchers.FetchTangled(handle, client, did)
 	if tangledProfile != "" {
 		fmt.Printf("Tangled profile: %s", tangledProfile)

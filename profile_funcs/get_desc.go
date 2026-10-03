@@ -17,7 +17,5 @@ func GetDescription(did string, c util.LexClient, ctx context.Context) string {
 		fmt.Println(err)
 	}
 
-	text := fmt.Sprintf("%s", ans)
-
-	return text
+	return fmt.Sprintf("%s", ans)
 }

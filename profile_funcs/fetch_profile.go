@@ -24,7 +24,7 @@ func FetchProfile(c util.LexClient, did string) bool {
 	}
 
 	if ans != nil {
-		fmt.Println("fun.arken.progile found")
+		fmt.Println("fun.arken.profile found")
 	}
 	return true
 }

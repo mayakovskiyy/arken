@@ -45,12 +45,12 @@ func main() {
 	profile := pfuncs.FetchProfile(client, did)
 
 	if profile != true {
-		fmt.Scan(&description)
+		fmt.Scan(description)
 		pfuncs.WriteDescription(ctx, description, handle, did, client)
 	}
 
 	profileData := pfuncs.GetDescription(did, client, ctx)
-	fmt.Println(profileData)
+	fmt.Println(pfuncs.ParseDesc(profileData))
 
 	tangledProfile := fetchers.FetchTangled(handle, client, did)
 	if tangledProfile != "" {
@@ -59,10 +59,6 @@ func main() {
 	blueskyProfile := fetchers.FetchBluesky(handle, client, did)
 	if blueskyProfile != "" {
 		fmt.Printf("Bluesky profile: %s", blueskyProfile)
-	}
-	whitewindProfile := fetchers.FetchWhiteWind(handle, client, did)
-	if whitewindProfile != "" {
-		fmt.Printf("WhiteWind profile: %s", whitewindProfile)
 	}
 	streamplaceProfile := fetchers.FetchStreamplace(handle, client, did)
 	if streamplaceProfile != "" {

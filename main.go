@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"crypto/des"
 	"fmt"
+	"strings"
 
 	// "net/http"
 	// "time"
@@ -45,7 +47,12 @@ func main() {
 	profile := pfuncs.FetchProfile(client, did)
 
 	if profile != true {
-		fmt.Scan(description)
+		fmt.Scan(&description)
+		if strings.Contains(description, "}") {
+			fmt.Println("arken: your description shouldn't contaion `}` symbol")
+			description = ""
+			fmt.Scan(&description)
+		}
 		pfuncs.WriteDescription(ctx, description, handle, did, client)
 	}
 

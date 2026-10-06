@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"crypto/des"
 	"fmt"
 	"strings"
 

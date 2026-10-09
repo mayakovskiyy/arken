@@ -1,0 +1,11 @@
+package main
+
+templ page(name string, description string, bluesky url, tangled url, streamplace string) {
+	<header>
+		<h2>{ name }</h2>
+		<p>{ description }</p>
+		<a href={ bluesky.URL }><p>bluesky</p></a>
+		<a href={ tangled.URL }><p>tangled</p></a>
+		<p>{ streamplace }</p>
+	</header>
+}

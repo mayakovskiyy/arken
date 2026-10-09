@@ -21,7 +21,7 @@ func FetchStreamplace(handle string, c util.LexClient, did string) string {
 		fmt.Println(err)
 
 		if strings.Contains(err.Error(), "RecordNotFound") {
-			fmt.Printf("404 arken: not found\n", err)
+			fmt.Printf("404 arken: not found\n")
 		}
 	}
 	/* if ans == nil {

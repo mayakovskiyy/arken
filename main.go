@@ -58,8 +58,8 @@ func main() {
 		pfuncs.WriteDescription(ctx, description, handle, did, client)
 	}
 
-	profileData := pfuncs.GetDescription(did, client, ctx)
-	fmt.Println(pfuncs.ParseDesc(profileData))
+	profileData := pfuncs.ParseDesc(pfuncs.GetDescription(did, client, ctx))
+	fmt.Println(profileData)
 
 	tangledProfile := fetchers.FetchTangled(handle, client, did)
 	if tangledProfile != "" {
@@ -74,7 +74,7 @@ func main() {
 		fmt.Printf("Streamplace profile: %s", streamplaceProfile)
 	}
 
-	comp = page(handle, description, blueskyProfile, tangledProfile, streamplaceProfile)
+	comp = page(handle, profileData, blueskyProfile, tangledProfile, streamplaceProfile)
 	http.Handle("/", templ.Handler(comp))
 
 	fmt.Println("arken: listening on :3000")

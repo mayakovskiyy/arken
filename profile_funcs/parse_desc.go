@@ -1,11 +1,18 @@
 package profilefuncs
 
 import (
-	"strings"
+	"encoding/json"
 )
 
 func ParseDesc(text string) string {
-	parts := strings.Split(text, `"description":`)
+	var data struct {
+		Description string `json:"description"`
+	}
+
+	if err := json.Unmarshal([]byte(text), &data); err != nil {
+		return ""
+	}
+	/* parts := strings.Split(text, `"description":`)
 	if len(parts) < 2 {
 		return ""
 	}
@@ -15,5 +22,7 @@ func ParseDesc(text string) string {
 		return ""
 	}
 
-	return desc[0]
+	return desc[0] */
+
+	return data.Description
 }

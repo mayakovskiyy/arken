@@ -11,11 +11,11 @@ import (
 	"github.com/bluesky-social/indigo/lex/util"
 )
 
-func GetDescription(did string, c util.LexClient, ctx context.Context) string {
+func GetDescription(did string, c util.LexClient, ctx context.Context) *agnostic.RepoGetRecord_Output {
 	ans, err := agnostic.RepoGetRecord(ctx, c, "", "fun.arken.profile", did, "self")
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	return fmt.Sprintf("%s", ans)
+	return ans
 }

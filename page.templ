@@ -1,7 +1,8 @@
 package main
 
-templ page(name string, description string, bluesky string, tangled string, streamplace string) {
+templ page(name string, description string, bluesky string, tangled string, streamplace string, avatar string) {
 	<header>
+		<img src={ avatar } alt="Bsky Avatar">
 		<h2>{ name }</h2>
 		<p>{ description }</p>
 		if bluesky != "" {
@@ -11,7 +12,7 @@ templ page(name string, description string, bluesky string, tangled string, stre
 			<a href={ tangled }>tangled</a>
 		}
 		if streamplace != "" {
-			<p>stremplace: { streamplace }</p>
+			<p>streamplace: { streamplace }</p>
 		}
 	</header>
 }

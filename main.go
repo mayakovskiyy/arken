@@ -10,6 +10,7 @@ import (
 	// "time"
 
 	fetchers "arken/fetchers"
+	profilefuncs "arken/profile_funcs"
 	// arken "arken/lexicons/api/arken"
 	pfuncs "arken/profile_funcs"
 
@@ -61,6 +62,11 @@ func main() {
 	profileData := pfuncs.ParseDesc(pfuncs.GetDescription(did, client, ctx))
 	fmt.Println(profileData)
 
+	avatar := profilefuncs.FetchAvatar(did, client, ctx)
+	if avatar != "" {
+		fmt.Printf("Avatar: %s \n", avatar)
+	}
+
 	tangledProfile := fetchers.FetchTangled(handle, client, did)
 	if tangledProfile != "" {
 		fmt.Printf("Tangled profile: %s", tangledProfile)
@@ -74,7 +80,7 @@ func main() {
 		fmt.Printf("Streamplace profile: %s", streamplaceProfile)
 	}
 
-	comp = page(handle, profileData, blueskyProfile, tangledProfile, streamplaceProfile)
+	comp = page(handle, profileData, blueskyProfile, tangledProfile, streamplaceProfile, avatar)
 	http.Handle("/", templ.Handler(comp))
 
 	fmt.Println("arken: listening on :3000")

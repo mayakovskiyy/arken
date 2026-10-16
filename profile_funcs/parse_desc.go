@@ -2,16 +2,17 @@ package profilefuncs
 
 import (
 	"encoding/json"
+	"github.com/bluesky-social/indigo/api/agnostic"
 )
 
-func ParseDesc(text string) string {
-	var data struct {
-		Description string `json:"description"`
-	}
+func ParseDesc(text *agnostic.RepoGetRecord_Output) string {
+	var data map[string]any
+	jsn, _ := json.Marshal(text.Value)
 
-	if err := json.Unmarshal([]byte(text), &data); err != nil {
-		return ""
-	}
+	_ = json.Unmarshal(jsn, &data)
+
+	desc := data["description"].(string)
+
 	/* parts := strings.Split(text, `"description":`)
 	if len(parts) < 2 {
 		return ""
@@ -24,5 +25,5 @@ func ParseDesc(text string) string {
 
 	return desc[0] */
 
-	return data.Description
+	return desc
 }

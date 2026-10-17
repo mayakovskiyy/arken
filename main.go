@@ -63,9 +63,7 @@ func main() {
 	fmt.Println(profileData)
 
 	avatar := profilefuncs.FetchAvatar(did, client, ctx)
-	if avatar != "" {
-		fmt.Printf("Avatar: %s \n", avatar)
-	}
+	fmt.Println(avatar)
 
 	tangledProfile := fetchers.FetchTangled(handle, client, did)
 	if tangledProfile != "" {
@@ -75,12 +73,16 @@ func main() {
 	if blueskyProfile != "" {
 		fmt.Printf("Bluesky profile: %s", blueskyProfile)
 	}
+	pinkleapProfile := fetchers.FetchPinkleap(handle, client, did)
+	if pinkleapProfile != "" {
+		fmt.Printf("Pinkleap profile: %s\n", pinkleapProfile)
+	}
 	streamplaceProfile := fetchers.FetchStreamplace(handle, client, did)
 	if streamplaceProfile != "" {
 		fmt.Printf("Streamplace profile: %s", streamplaceProfile)
 	}
 
-	comp = page(handle, profileData, blueskyProfile, tangledProfile, streamplaceProfile, avatar)
+	comp = page(handle, profileData, blueskyProfile, tangledProfile, streamplaceProfile, pinkleapProfile, fmt.Sprintf("https://cdn.bsky.app/img/avatar/plain/%s/%s@jpeg", did, avatar))
 	http.Handle("/", templ.Handler(comp))
 
 	fmt.Println("arken: listening on :3000")

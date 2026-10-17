@@ -19,7 +19,7 @@ func FetchAvatar(did string, c util.LexClient, ctx context.Context) string {
 
 	_ = json.Unmarshal(jsn, &data)
 
-	desc := data["avatar"].(map[string]any)["ref"].(map[string]any)["$link"].(string)
+	avatarCid := data["avatar"].(map[string]any)["ref"].(map[string]any)["$link"].(string)
 
-	return desc
+	return avatarCid
 }

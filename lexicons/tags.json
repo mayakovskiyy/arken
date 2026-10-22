@@ -1,0 +1,21 @@
+{
+  "lexicon": 1,
+  "id": "fun.arken.tags",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["author", "description", "handle"],
+        "properties": {
+          "tag_main": {"type": "string"},
+          "tag_hobby": {"type": "string"},
+          "tag_fandom1": {"type": "string"},
+          "tag_fandom2": {"type": "string"},
+          "tag_minor_activity": {"type": "string"}
+        }
+      }
+    }
+  }
+}

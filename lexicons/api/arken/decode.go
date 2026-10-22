@@ -15,6 +15,12 @@ func DecodeRecord(collection string, data []byte) (any, error) {
 			return nil, err
 		}
 		return &v, nil
+	case "fun.arken.tags":
+		var v ArkenTags
+		if err := v.UnmarshalCBOR(data); err != nil {
+			return nil, err
+		}
+		return &v, nil
 	default:
 		return nil, fmt.Errorf("unknown collection: %s", collection)
 	}

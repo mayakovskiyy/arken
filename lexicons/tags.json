@@ -7,7 +7,7 @@
       "key": "tid",
       "record": {
         "type": "object",
-        "required": ["author", "description", "handle"],
+        "required": ["tag_main", "tag_hobby", "tag_fandom1", "tag_fandom2", "tag_minor_activity"],
         "properties": {
           "tag_main": {"type": "string"},
           "tag_hobby": {"type": "string"},

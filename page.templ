@@ -1,10 +1,11 @@
 package main
 
-templ page(name string, description string, bluesky string, tangled string, streamplace string, pinkleap string, avatar string) {
+templ page(name string, description string, bluesky string, tangled string, streamplace string, pinkleap string, avatar string, tag1 string, tag2 string, tag3 string, tag4 string, tag5 string) {
 	<header>
 		<img src={ avatar } alt="Bsky Avatar" width="400" height="400">
 		<h2>{ name }</h2>
 		<p>{ description }</p>
+		<h6>#{ tag1 } #{ tag2 } #{ tag3 } #{ tag4 } #{ tag5 }</h6>
 		if bluesky != "" {
 			<a href={ bluesky }>bluesky</a>
 		}

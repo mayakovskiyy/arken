@@ -4,7 +4,6 @@ package arken
 
 import (
 	"github.com/jcalabro/atmos/cbor"
-	"github.com/jcalabro/gt"
 )
 
 const (
@@ -13,12 +12,12 @@ const (
 
 // ArkenTags is a "fun.arken.tags" record.
 type ArkenTags struct {
-	LexiconTypeID      string            `json:"$type,omitempty" cborgen:"$type,const=fun.arken.tags"`
-	Tag_fandom1        gt.Option[string] `json:"tag_fandom1,omitzero"`
-	Tag_fandom2        gt.Option[string] `json:"tag_fandom2,omitzero"`
-	Tag_hobby          gt.Option[string] `json:"tag_hobby,omitzero"`
-	Tag_main           gt.Option[string] `json:"tag_main,omitzero"`
-	Tag_minor_activity gt.Option[string] `json:"tag_minor_activity,omitzero"`
+	LexiconTypeID      string `json:"$type,omitempty" cborgen:"$type,const=fun.arken.tags"`
+	Tag_fandom1        string `json:"tag_fandom1"`
+	Tag_fandom2        string `json:"tag_fandom2"`
+	Tag_hobby          string `json:"tag_hobby"`
+	Tag_main           string `json:"tag_main"`
+	Tag_minor_activity string `json:"tag_minor_activity"`
 
 	// extra preserves unknown fields for same-format round-trips.
 	extra []extraField
@@ -39,77 +38,41 @@ func (s *ArkenTags) MarshalCBOR() ([]byte, error) {
 }
 
 func (s *ArkenTags) AppendCBOR(buf []byte) ([]byte, error) {
-	n := 1 + countExtra(s.extra, extraEncodingCBOR)
-	if s.Tag_main.HasVal() {
-		n++
-	}
-	if s.Tag_hobby.HasVal() {
-		n++
-	}
-	if s.Tag_fandom1.HasVal() {
-		n++
-	}
-	if s.Tag_fandom2.HasVal() {
-		n++
-	}
-	if s.Tag_minor_activity.HasVal() {
-		n++
-	}
-	buf = cbor.AppendMapHeader(buf, uint64(n))
+	buf = cbor.AppendMapHeader(buf, uint64(6+countExtra(s.extra, extraEncodingCBOR)))
 	if len(s.extra) > 0 {
 		ei := 0
 		ei, buf = appendCBORExtrasBefore(s.extra, ei, "$type", buf)
 		buf = append(buf, cborKey_ArkenTags_dollar_type...)
 		buf = cbor.AppendText(buf, "fun.arken.tags")
 		ei, buf = appendCBORExtrasBefore(s.extra, ei, "tag_main", buf)
-		if s.Tag_main.HasVal() {
-			buf = append(buf, cborKey_ArkenTags_tag_main...)
-			buf = cbor.AppendText(buf, s.Tag_main.Val())
-		}
+		buf = append(buf, cborKey_ArkenTags_tag_main...)
+		buf = cbor.AppendText(buf, s.Tag_main)
 		ei, buf = appendCBORExtrasBefore(s.extra, ei, "tag_hobby", buf)
-		if s.Tag_hobby.HasVal() {
-			buf = append(buf, cborKey_ArkenTags_tag_hobby...)
-			buf = cbor.AppendText(buf, s.Tag_hobby.Val())
-		}
+		buf = append(buf, cborKey_ArkenTags_tag_hobby...)
+		buf = cbor.AppendText(buf, s.Tag_hobby)
 		ei, buf = appendCBORExtrasBefore(s.extra, ei, "tag_fandom1", buf)
-		if s.Tag_fandom1.HasVal() {
-			buf = append(buf, cborKey_ArkenTags_tag_fandom1...)
-			buf = cbor.AppendText(buf, s.Tag_fandom1.Val())
-		}
+		buf = append(buf, cborKey_ArkenTags_tag_fandom1...)
+		buf = cbor.AppendText(buf, s.Tag_fandom1)
 		ei, buf = appendCBORExtrasBefore(s.extra, ei, "tag_fandom2", buf)
-		if s.Tag_fandom2.HasVal() {
-			buf = append(buf, cborKey_ArkenTags_tag_fandom2...)
-			buf = cbor.AppendText(buf, s.Tag_fandom2.Val())
-		}
+		buf = append(buf, cborKey_ArkenTags_tag_fandom2...)
+		buf = cbor.AppendText(buf, s.Tag_fandom2)
 		ei, buf = appendCBORExtrasBefore(s.extra, ei, "tag_minor_activity", buf)
-		if s.Tag_minor_activity.HasVal() {
-			buf = append(buf, cborKey_ArkenTags_tag_minor_activity...)
-			buf = cbor.AppendText(buf, s.Tag_minor_activity.Val())
-		}
+		buf = append(buf, cborKey_ArkenTags_tag_minor_activity...)
+		buf = cbor.AppendText(buf, s.Tag_minor_activity)
 		_, buf = appendCBORExtrasBefore(s.extra, ei, "", buf)
 	} else {
 		buf = append(buf, cborKey_ArkenTags_dollar_type...)
 		buf = cbor.AppendText(buf, "fun.arken.tags")
-		if s.Tag_main.HasVal() {
-			buf = append(buf, cborKey_ArkenTags_tag_main...)
-			buf = cbor.AppendText(buf, s.Tag_main.Val())
-		}
-		if s.Tag_hobby.HasVal() {
-			buf = append(buf, cborKey_ArkenTags_tag_hobby...)
-			buf = cbor.AppendText(buf, s.Tag_hobby.Val())
-		}
-		if s.Tag_fandom1.HasVal() {
-			buf = append(buf, cborKey_ArkenTags_tag_fandom1...)
-			buf = cbor.AppendText(buf, s.Tag_fandom1.Val())
-		}
-		if s.Tag_fandom2.HasVal() {
-			buf = append(buf, cborKey_ArkenTags_tag_fandom2...)
-			buf = cbor.AppendText(buf, s.Tag_fandom2.Val())
-		}
-		if s.Tag_minor_activity.HasVal() {
-			buf = append(buf, cborKey_ArkenTags_tag_minor_activity...)
-			buf = cbor.AppendText(buf, s.Tag_minor_activity.Val())
-		}
+		buf = append(buf, cborKey_ArkenTags_tag_main...)
+		buf = cbor.AppendText(buf, s.Tag_main)
+		buf = append(buf, cborKey_ArkenTags_tag_hobby...)
+		buf = cbor.AppendText(buf, s.Tag_hobby)
+		buf = append(buf, cborKey_ArkenTags_tag_fandom1...)
+		buf = cbor.AppendText(buf, s.Tag_fandom1)
+		buf = append(buf, cborKey_ArkenTags_tag_fandom2...)
+		buf = cbor.AppendText(buf, s.Tag_fandom2)
+		buf = append(buf, cborKey_ArkenTags_tag_minor_activity...)
+		buf = cbor.AppendText(buf, s.Tag_minor_activity)
 	}
 	return buf, nil
 }
@@ -160,15 +123,9 @@ func (s *ArkenTags) UnmarshalCBORAt(data []byte, pos int) (int, error) {
 			}
 		case 8:
 			if string(data[keyStart:keyEnd]) == "tag_main" {
-				if cbor.IsNull(data, pos) {
-					pos++
-				} else {
-					var v string
-					v, pos, err = cbor.ReadText(data, pos)
-					if err != nil {
-						return 0, err
-					}
-					s.Tag_main = gt.Some(v)
+				s.Tag_main, pos, err = cbor.ReadText(data, pos)
+				if err != nil {
+					return 0, err
 				}
 			} else {
 				valueStart := pos
@@ -180,15 +137,9 @@ func (s *ArkenTags) UnmarshalCBORAt(data []byte, pos int) (int, error) {
 			}
 		case 9:
 			if string(data[keyStart:keyEnd]) == "tag_hobby" {
-				if cbor.IsNull(data, pos) {
-					pos++
-				} else {
-					var v string
-					v, pos, err = cbor.ReadText(data, pos)
-					if err != nil {
-						return 0, err
-					}
-					s.Tag_hobby = gt.Some(v)
+				s.Tag_hobby, pos, err = cbor.ReadText(data, pos)
+				if err != nil {
+					return 0, err
 				}
 			} else {
 				valueStart := pos
@@ -200,26 +151,14 @@ func (s *ArkenTags) UnmarshalCBORAt(data []byte, pos int) (int, error) {
 			}
 		case 11:
 			if string(data[keyStart:keyEnd]) == "tag_fandom1" {
-				if cbor.IsNull(data, pos) {
-					pos++
-				} else {
-					var v string
-					v, pos, err = cbor.ReadText(data, pos)
-					if err != nil {
-						return 0, err
-					}
-					s.Tag_fandom1 = gt.Some(v)
+				s.Tag_fandom1, pos, err = cbor.ReadText(data, pos)
+				if err != nil {
+					return 0, err
 				}
 			} else if string(data[keyStart:keyEnd]) == "tag_fandom2" {
-				if cbor.IsNull(data, pos) {
-					pos++
-				} else {
-					var v string
-					v, pos, err = cbor.ReadText(data, pos)
-					if err != nil {
-						return 0, err
-					}
-					s.Tag_fandom2 = gt.Some(v)
+				s.Tag_fandom2, pos, err = cbor.ReadText(data, pos)
+				if err != nil {
+					return 0, err
 				}
 			} else {
 				valueStart := pos
@@ -231,15 +170,9 @@ func (s *ArkenTags) UnmarshalCBORAt(data []byte, pos int) (int, error) {
 			}
 		case 18:
 			if string(data[keyStart:keyEnd]) == "tag_minor_activity" {
-				if cbor.IsNull(data, pos) {
-					pos++
-				} else {
-					var v string
-					v, pos, err = cbor.ReadText(data, pos)
-					if err != nil {
-						return 0, err
-					}
-					s.Tag_minor_activity = gt.Some(v)
+				s.Tag_minor_activity, pos, err = cbor.ReadText(data, pos)
+				if err != nil {
+					return 0, err
 				}
 			} else {
 				valueStart := pos
@@ -284,46 +217,36 @@ func (s *ArkenTags) AppendJSON(buf []byte) ([]byte, error) {
 	buf = append(buf, jsonKey_ArkenTags_dollar_type...)
 	buf = cbor.AppendJSONString(buf, "fun.arken.tags")
 	first = false
-	if s.Tag_fandom1.HasVal() {
-		if !first {
-			buf = append(buf, ',')
-		}
-		buf = append(buf, jsonKey_ArkenTags_tag_fandom1...)
-		buf = cbor.AppendJSONString(buf, s.Tag_fandom1.Val())
-		first = false
+	if !first {
+		buf = append(buf, ',')
 	}
-	if s.Tag_fandom2.HasVal() {
-		if !first {
-			buf = append(buf, ',')
-		}
-		buf = append(buf, jsonKey_ArkenTags_tag_fandom2...)
-		buf = cbor.AppendJSONString(buf, s.Tag_fandom2.Val())
-		first = false
+	buf = append(buf, jsonKey_ArkenTags_tag_fandom1...)
+	buf = cbor.AppendJSONString(buf, s.Tag_fandom1)
+	first = false
+	if !first {
+		buf = append(buf, ',')
 	}
-	if s.Tag_hobby.HasVal() {
-		if !first {
-			buf = append(buf, ',')
-		}
-		buf = append(buf, jsonKey_ArkenTags_tag_hobby...)
-		buf = cbor.AppendJSONString(buf, s.Tag_hobby.Val())
-		first = false
+	buf = append(buf, jsonKey_ArkenTags_tag_fandom2...)
+	buf = cbor.AppendJSONString(buf, s.Tag_fandom2)
+	first = false
+	if !first {
+		buf = append(buf, ',')
 	}
-	if s.Tag_main.HasVal() {
-		if !first {
-			buf = append(buf, ',')
-		}
-		buf = append(buf, jsonKey_ArkenTags_tag_main...)
-		buf = cbor.AppendJSONString(buf, s.Tag_main.Val())
-		first = false
+	buf = append(buf, jsonKey_ArkenTags_tag_hobby...)
+	buf = cbor.AppendJSONString(buf, s.Tag_hobby)
+	first = false
+	if !first {
+		buf = append(buf, ',')
 	}
-	if s.Tag_minor_activity.HasVal() {
-		if !first {
-			buf = append(buf, ',')
-		}
-		buf = append(buf, jsonKey_ArkenTags_tag_minor_activity...)
-		buf = cbor.AppendJSONString(buf, s.Tag_minor_activity.Val())
-		first = false
+	buf = append(buf, jsonKey_ArkenTags_tag_main...)
+	buf = cbor.AppendJSONString(buf, s.Tag_main)
+	first = false
+	if !first {
+		buf = append(buf, ',')
 	}
+	buf = append(buf, jsonKey_ArkenTags_tag_minor_activity...)
+	buf = cbor.AppendJSONString(buf, s.Tag_minor_activity)
+	first = false
 	for _, ef := range s.extra {
 		if ef.Encoding != extraEncodingJSON {
 			continue
@@ -370,74 +293,29 @@ func (s *ArkenTags) UnmarshalJSONAt(data []byte, pos int) (int, error) {
 				return 0, err
 			}
 		case "tag_fandom1":
-			if cbor.IsJSONNull(data, pos) {
-				pos, err = cbor.SkipJSONNull(data, pos)
-				if err != nil {
-					return 0, err
-				}
-			} else {
-				var v string
-				v, pos, err = cbor.ReadJSONString(data, pos)
-				if err != nil {
-					return 0, err
-				}
-				s.Tag_fandom1 = gt.Some(v)
+			s.Tag_fandom1, pos, err = cbor.ReadJSONString(data, pos)
+			if err != nil {
+				return 0, err
 			}
 		case "tag_fandom2":
-			if cbor.IsJSONNull(data, pos) {
-				pos, err = cbor.SkipJSONNull(data, pos)
-				if err != nil {
-					return 0, err
-				}
-			} else {
-				var v string
-				v, pos, err = cbor.ReadJSONString(data, pos)
-				if err != nil {
-					return 0, err
-				}
-				s.Tag_fandom2 = gt.Some(v)
+			s.Tag_fandom2, pos, err = cbor.ReadJSONString(data, pos)
+			if err != nil {
+				return 0, err
 			}
 		case "tag_hobby":
-			if cbor.IsJSONNull(data, pos) {
-				pos, err = cbor.SkipJSONNull(data, pos)
-				if err != nil {
-					return 0, err
-				}
-			} else {
-				var v string
-				v, pos, err = cbor.ReadJSONString(data, pos)
-				if err != nil {
-					return 0, err
-				}
-				s.Tag_hobby = gt.Some(v)
+			s.Tag_hobby, pos, err = cbor.ReadJSONString(data, pos)
+			if err != nil {
+				return 0, err
 			}
 		case "tag_main":
-			if cbor.IsJSONNull(data, pos) {
-				pos, err = cbor.SkipJSONNull(data, pos)
-				if err != nil {
-					return 0, err
-				}
-			} else {
-				var v string
-				v, pos, err = cbor.ReadJSONString(data, pos)
-				if err != nil {
-					return 0, err
-				}
-				s.Tag_main = gt.Some(v)
+			s.Tag_main, pos, err = cbor.ReadJSONString(data, pos)
+			if err != nil {
+				return 0, err
 			}
 		case "tag_minor_activity":
-			if cbor.IsJSONNull(data, pos) {
-				pos, err = cbor.SkipJSONNull(data, pos)
-				if err != nil {
-					return 0, err
-				}
-			} else {
-				var v string
-				v, pos, err = cbor.ReadJSONString(data, pos)
-				if err != nil {
-					return 0, err
-				}
-				s.Tag_minor_activity = gt.Some(v)
+			s.Tag_minor_activity, pos, err = cbor.ReadJSONString(data, pos)
+			if err != nil {
+				return 0, err
 			}
 		default:
 			valueStart := pos

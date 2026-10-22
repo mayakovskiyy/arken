@@ -10,10 +10,9 @@ import (
 	// "time"
 
 	fetchers "arken/fetchers"
-	profilefuncs "arken/profile_funcs"
 	// arken "arken/lexicons/api/arken"
 	pfuncs "arken/profile_funcs"
-
+	tagsfuncs "arken/profile_funcs/tags"
 	// "io"
 
 	// "github.com/bluesky-social/indigo/api/atproto"
@@ -32,6 +31,7 @@ func main() {
 	var password string
 	var description string
 	var comp templ.Component
+	var tag1, tag2, tag3, tag4, tag5 string
 
 	fmt.Scan(&handle)
 	fmt.Scan(&password)
@@ -59,10 +59,22 @@ func main() {
 		pfuncs.WriteDescription(ctx, description, handle, did, client)
 	}
 
+	tags := tagsfuncs.FetchTags(client, did)
+
+	if tags != true {
+		for i := 0; i < 5; i++ {
+			tagNum := []string{tag1, tag2, tag3, tag4, tag5}
+			tagDesc := []string{"main", "hobby", "first fandom", "second fandom", "minor activity"}
+			fmt.Printf("Enter your %s tag:", tagDesc[i])
+			fmt.Scan(tagNum[i])
+		}
+		tagsfuncs.WriteTags(ctx, did, client, tag1, tag2, tag3, tag4, tag5)
+	}
+
 	profileData := pfuncs.ParseDesc(pfuncs.GetDescription(did, client, ctx))
 	fmt.Println(profileData)
 
-	avatar := profilefuncs.FetchAvatar(did, client, ctx)
+	avatar := pfuncs.FetchAvatar(did, client, ctx)
 	fmt.Println(avatar)
 
 	tangledProfile := fetchers.FetchTangled(handle, client, did)
@@ -82,7 +94,7 @@ func main() {
 		fmt.Printf("Streamplace profile: %s", streamplaceProfile)
 	}
 
-	comp = page(handle, profileData, blueskyProfile, tangledProfile, streamplaceProfile, pinkleapProfile, fmt.Sprintf("https://cdn.bsky.app/img/avatar/plain/%s/%s@jpeg", did, avatar))
+	comp = page(handle, profileData, blueskyProfile, tangledProfile, streamplaceProfile, pinkleapProfile, fmt.Sprintf("https://cdn.bsky.app/img/avatar/plain/%s/%s@jpeg", did, avatar), tag1, tag2, tag3, tag4, tag5)
 	http.Handle("/", templ.Handler(comp))
 
 	fmt.Println("arken: listening on :3000")
